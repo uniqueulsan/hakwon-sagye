@@ -1,0 +1,17 @@
+.cfbar{border:1px solid var(--line,#E2DCCD);border-left:4px solid var(--accent,#1F3D2F);border-radius:12px;background:var(--sheet,#FBF8F1);padding:12px 14px;margin:14px 0;display:flex;flex-direction:column;gap:10px}
+.cfrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.cflab{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--muted,#5A6467)}
+#cfName{color:var(--ink,#3C4447);min-width:0;overflow-wrap:anywhere}
+.cfdate{font-size:.8rem;color:var(--muted,#5A6467)}
+.cfsp{flex:1}
+.cfbtn{font:inherit;font-size:.9rem;font-weight:600;padding:.55em 1em;border-radius:9px;border:1.5px solid var(--accent,#1F3D2F);background:var(--accent,#1F3D2F);color:var(--sheet,#fff);cursor:pointer}
+.cfbtn.ghost{background:transparent;color:var(--accent,#1F3D2F)}
+.cfbtn:focus-visible{outline:3px solid #C9A66B;outline-offset:2px}
+.cfpanel{display:flex;flex-direction:column;gap:8px}
+.cfhelp,.cfwarn{margin:0;font-size:.86rem;line-height:1.6;color:var(--muted,#5A6467)}
+.cfwarn{color:var(--warn,#a4451f)}
+.cfl{font-size:.82rem;font-weight:600;color:var(--ink,#3C4447)}
+#cfText,.cfout{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,monospace;border:1px solid var(--line,#E2DCCD);border-radius:8px;padding:8px;background:var(--paper,#fff);color:var(--ink,#3C4447)}
+.cffile{display:inline-block}
+#cfFile{position:absolute;width:1px;height:1px;opacity:0}
+@media print{.cfbar{display:none}}

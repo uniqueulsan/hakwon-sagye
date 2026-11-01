@@ -1,0 +1,8 @@
+.toolnav{width:100%;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line,#E2DCCD);padding:6px 0 8px;margin-bottom:6px;-webkit-overflow-scrolling:touch}
+.toolnav::-webkit-scrollbar{display:none}
+.toolnav .tn-brand{flex:none;font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--muted,#5A6467);margin-right:6px}
+.toolnav a{flex:none;white-space:nowrap;font-size:.86rem;font-weight:600;color:var(--accent,#1F3D2F);text-decoration:none;padding:6px 10px;border-radius:8px}
+.toolnav a:hover{background:var(--accent-soft,#E3EBE4)}
+.toolnav a:focus-visible{outline:3px solid #C9A66B;outline-offset:1px}
+.toolnav a[aria-current="page"]{background:var(--accent,#1F3D2F);color:#fff}
+@media print{.toolnav{display:none}}

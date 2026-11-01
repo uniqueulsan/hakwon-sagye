@@ -1,0 +1,393 @@
+<title>학원四季 개원 준비 플래너</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Myeongjo:wght@700;800&display=swap">
+<style>
+/* Layout: 개원 준비 서류철 — 위에 학원 규모 입력과 예산 요약, 아래 탭(비품·기기 / 교재·구독 / 본사 미팅 / 일정표 / 폐업 시) */
+:root{
+  --paper:#F5F1E6; --sheet:#FFFDF8; --ink:#3C4447; --muted:#5A6467; --line:#E2DCCD;
+  --accent:#1F3D2F; --accent-soft:#E3EBE4; --sage:#4D7770; --gold:#8a6a30; --gold-soft:#f5eedf; --cream:#fbf5e9;
+  --warn:#8a5d0e; --warn-soft:#f8efd9; --bad:#a4451f; --bad-soft:#f8e9e2;
+  --display:"Nanum Myeongjo","Noto Serif KR",serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#151a18; --sheet:#1d2421; --ink:#e7ece9; --muted:#b4bdb8; --line:#344039;
+  --accent:#8fc3cf; --accent-soft:#22332b; --sage:#97c4a2; --gold:#e0bd7a; --gold-soft:#33291a;
+  --warn:#e8c46e; --warn-soft:#332a14; --bad:#ef9a76; --bad-soft:#3a2720; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#151a18; --sheet:#1d2421; --ink:#e7ece9; --muted:#b4bdb8; --line:#344039;
+  --accent:#8fc3cf; --accent-soft:#22332b; --sage:#97c4a2; --gold:#e0bd7a; --gold-soft:#33291a;
+  --warn:#e8c46e; --warn-soft:#332a14; --bad:#ef9a76; --bad-soft:#3a2720; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+h1,h2,h3{margin:0;text-wrap:balance;color:var(--accent)}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.page{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:18px;width:100%}
+header.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.badge{background:var(--cream);border-radius:12px;padding:8px 14px;line-height:0}
+.badge img{height:44px;width:auto}
+header.top h1{font-family:var(--display);font-size:1.6rem}
+header.top p{font-size:.9rem;color:var(--muted)}
+.actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1.5px solid var(--accent);background:transparent;color:var(--accent);border-radius:9px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:.92rem}
+.btn.solid{background:var(--accent);color:var(--sheet)}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+h2{font-family:var(--display);font-size:1.25rem}
+.muted{color:var(--muted)} .small{font-size:.88rem}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 12px}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld label{font-size:.85rem;font-weight:600}
+.fld input,.fld select{border:1px solid var(--line);border-radius:9px;background:var(--paper);padding:8px 10px;width:100%;min-width:0}
+.fld input[type=number]{text-align:right;font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;background:var(--sheet)}
+.kpi span{font-size:.8rem;color:var(--muted)}
+.kpi b{font-size:1.4rem;font-variant-numeric:tabular-nums;color:var(--accent)}
+.kpi small{font-size:.78rem;color:var(--muted)}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 12px;font-weight:600;color:var(--muted);cursor:pointer}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.tblwrap{overflow-x:auto}
+table.list{width:100%;border-collapse:collapse;font-size:.9rem;min-width:640px}
+table.list th,table.list td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+table.list th{font-size:.76rem;color:var(--muted);font-weight:600;background:var(--paper)}
+table.list td.num,table.list th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.list tr.cat td{background:var(--accent-soft);font-weight:700;color:var(--accent)}
+table.list input[type=number]{width:6.5em;border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:4px 6px;text-align:right;font-variant-numeric:tabular-nums}
+table.list input[type=text]{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:4px 6px}
+table.list input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent)}
+tr.off td{opacity:.45}
+.src{display:inline-block;font-size:.7rem;font-weight:700;padding:0 7px;border-radius:99px;white-space:nowrap}
+.s-src{background:var(--accent-soft);color:var(--accent)} .s-as{background:var(--gold-soft);color:var(--gold)} .s-q{border:1px solid var(--muted);color:var(--muted)}
+.tip{font-size:.82rem;color:var(--muted)}
+.note{background:var(--gold-soft);border-radius:10px;padding:10px 14px;font-size:.88rem;line-height:1.7}
+ol.time{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ol.time li{display:grid;grid-template-columns:7.5em 4.5em 1fr;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:baseline}
+ol.time li b.d{font-variant-numeric:tabular-nums;color:var(--accent)}
+ol.time li .dd{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+ol.time li .who{font-size:.72rem;font-weight:700;padding:0 7px;border-radius:99px;margin-left:6px}
+@media (max-width:520px){ol.time li{grid-template-columns:6.5em 1fr}ol.time li .dd{display:none}}
+ul.qs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:0}
+ul.qs li{display:grid;grid-template-columns:22px 1fr;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+ul.qs li .box{width:15px;height:15px;border:1.5px solid var(--ink);border-radius:3px;margin-top:.35em}
+ul.qs li span.w{display:block;font-size:.82rem;color:var(--muted)}
+h3{font-size:1rem;margin-top:6px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--sheet);padding:8px 14px;border-radius:8px;font-size:.88rem;z-index:20}
+@media print{
+  :root{--paper:#fff;--sheet:#fff;--ink:#222;--muted:#555;--line:#ccc;--accent:#1F3D2F;--accent-soft:#eef3ef;color-scheme:light}
+  @page{size:A4;margin:12mm}
+  body{padding:0;font-size:9.5pt}
+  .actions,nav.tabs,.toast{display:none!important}
+  section.tab{display:flex!important;break-before:page}
+  table.list{min-width:0}
+  table.list input{border:0;background:none;padding:0}
+}
+.cfbar{border:1px solid var(--line,#E2DCCD);border-left:4px solid var(--accent,#1F3D2F);border-radius:12px;background:var(--sheet,#FBF8F1);padding:12px 14px;margin:14px 0;display:flex;flex-direction:column;gap:10px}
+.cfrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.cflab{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--muted,#5A6467)}
+#cfName{color:var(--ink,#3C4447);min-width:0;overflow-wrap:anywhere}
+.cfdate{font-size:.8rem;color:var(--muted,#5A6467)}
+.cfsp{flex:1}
+.cfbtn{font:inherit;font-size:.9rem;font-weight:600;padding:.55em 1em;border-radius:9px;border:1.5px solid var(--accent,#1F3D2F);background:var(--accent,#1F3D2F);color:var(--sheet,#fff);cursor:pointer}
+.cfbtn.ghost{background:transparent;color:var(--accent,#1F3D2F)}
+.cfbtn:focus-visible{outline:3px solid #C9A66B;outline-offset:2px}
+.cfpanel{display:flex;flex-direction:column;gap:8px}
+.cfhelp,.cfwarn{margin:0;font-size:.86rem;line-height:1.6;color:var(--muted,#5A6467)}
+.cfwarn{color:var(--warn,#a4451f)}
+.cfl{font-size:.82rem;font-weight:600;color:var(--ink,#3C4447)}
+#cfText,.cfout{width:100%;box-sizing:border-box;font:12px/1.5 ui-monospace,Menlo,monospace;border:1px solid var(--line,#E2DCCD);border-radius:8px;padding:8px;background:var(--paper,#fff);color:var(--ink,#3C4447)}
+.cffile{display:inline-block}
+#cfFile{position:absolute;width:1px;height:1px;opacity:0}
+@media print{.cfbar{display:none}}
+.toolnav{width:100%;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line,#E2DCCD);padding:6px 0 8px;margin-bottom:6px;-webkit-overflow-scrolling:touch}
+.toolnav::-webkit-scrollbar{display:none}
+.toolnav .tn-brand{flex:none;font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--muted,#5A6467);margin-right:6px}
+.toolnav a{flex:none;white-space:nowrap;font-size:.86rem;font-weight:600;color:var(--accent,#1F3D2F);text-decoration:none;padding:6px 10px;border-radius:8px}
+.toolnav a:hover{background:var(--accent-soft,#E3EBE4)}
+.toolnav a:focus-visible{outline:3px solid #C9A66B;outline-offset:1px}
+.toolnav a[aria-current="page"]{background:var(--accent,#1F3D2F);color:#fff}
+@media print{.toolnav{display:none}}
+</style>
+
+<div class="page">
+<nav class="toolnav no-print" aria-label="학원四季 도구">
+  <span class="tn-brand">학원四季 도구</span>
+  <a data-k="ops" href="https://claude.ai/artifact/QUZxGSXpKdeHziye3mUHTG" target="_blank" rel="noopener">운영실</a>
+  <a data-k="area" href="https://claude.ai/artifact/DnQJHkxqZH7oDMffU5cbkz" target="_blank" rel="noopener">상권 리포트</a>
+  <a data-k="verify" href="https://claude.ai/artifact/1aYSvp2cPeoeqRAU4Wsnhp" target="_blank" rel="noopener">검증표</a>
+  <a data-k="pl" href="https://claude.ai/artifact/WRPse7ehuNJVKq7uoSMjjo" target="_blank" rel="noopener">손익 시트</a>
+  <a data-k="report" href="https://claude.ai/artifact/BQqrnaxf3NVnEJzoJ5Ahiv" target="_blank" rel="noopener">보고서 양식</a>
+  <a data-k="open" aria-current="page" href="https://claude.ai/artifact/6RZ4aUnoAVd36LwnSGx9XN" target="_blank" rel="noopener">개원 플래너</a>
+  <a data-k="diag" href="https://claude.ai/artifact/J4mKkVHAho1KQfYHLUNWEn" target="_blank" rel="noopener">진단</a>
+</nav>
+  <header class="top">
+    <div class="badge"><img src="data:image/png;base64,__LOGO__" alt="학원四季사계"></div>
+    <div><h1>개원 준비 플래너</h1><p>학원 안쪽의 창업과 정리 · 비품부터 교재·구독, 본사 교육, 일정까지</p></div>
+    <div class="actions">
+      <button class="btn solid" id="printBtn" hidden>인쇄 · PDF 저장</button>
+      <button class="btn" id="copyBtn">목록 복사</button>
+      <button class="btn" id="resetBtn">예시로 되돌리기</button>
+    </div>
+  </header>
+<section class="cfbar no-print" aria-label="의뢰 파일">
+  <div class="cfrow">
+    <span class="cflab">의뢰 파일</span><b id="cfName">열린 의뢰 없음</b><span class="cfdate" id="cfDate"></span>
+    <span class="cfsp"></span>
+    <button class="cfbtn" id="cfCopy" type="button">의뢰 파일 복사</button>
+    <button class="cfbtn ghost" id="cfOpenBtn" type="button" aria-expanded="false" aria-controls="cfPanel">의뢰 파일 열기</button>
+  </div>
+  <div class="cfpanel" id="cfPanel" hidden>
+    <p class="cfhelp">'의뢰 파일 복사'로 받은 글이나 진단 앱의 '결과 텍스트'를 붙여 넣거나, 저장해 둔 .txt 파일을 고르세요. 진단 결과·검증표·손익 시트·개원 플래너 값이 한 파일에 함께 담겨 있어서, 이 화면에 필요한 값은 자동으로 채워집니다.</p>
+    <label class="cfl" for="cfText">붙여 넣기</label>
+    <textarea id="cfText" rows="4" placeholder="[학원四季 의뢰 파일 v1] 또는 [학원 경영 진단 결과지]로 시작하는 글"></textarea>
+    <div class="cfrow">
+      <label class="cfbtn ghost cffile" for="cfFile">.txt 파일 고르기</label><input id="cfFile" type="file" accept=".txt,.json,text/plain,application/json">
+      <span class="cfsp"></span>
+      <button class="cfbtn" id="cfLoad" type="button">이 의뢰로 열기</button>
+    </div>
+    <p class="cfwarn">의뢰 파일에는 의뢰인 정보가 들어 있습니다. 메모장이나 '나와의 채팅'처럼 원장님만 보는 곳에 보관하고, 단체방이나 다른 사람에게 보내지 마세요.</p>
+  </div>
+  <textarea id="cfOut" class="cfout" rows="3" readonly hidden aria-label="복사할 의뢰 파일"></textarea>
+</section>
+
+
+  <div class="sheet">
+    <h2>학원 규모</h2>
+    <div class="fields">
+      <div class="fld"><label for="i_name">학원 이름</label><input id="i_name" type="text"></div>
+      <div class="fld"><label for="i_open">개원 예정일</label><input id="i_open" type="date"></div>
+      <div class="fld"><label for="i_rooms">강의실 수</label><input id="i_rooms" type="number" min="1"></div>
+      <div class="fld"><label for="i_seats">강의실당 좌석</label><input id="i_seats" type="number" min="1"></div>
+      <div class="fld"><label for="i_wc">화장실 칸 수</label><input id="i_wc" type="number" min="0"></div>
+      <div class="fld"><label for="i_students">목표 원생 수</label><input id="i_students" type="number" min="0"></div>
+      <div class="fld"><label for="i_target">대상</label><select id="i_target"><option>초등</option><option>중등</option><option>초·중등</option></select></div>
+      <div class="fld"><label for="i_fr">가맹 여부</label><select id="i_fr"><option>독립 학원</option><option>프랜차이즈 가맹</option></select></div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span>초기 일시 비용</span><b id="k_once">–</b><small>구매 비품·기기·설치</small></div>
+      <div class="kpi"><span>월 고정 비용</span><b id="k_month">–</b><small>렌탈·소모품·구독</small></div>
+      <div class="kpi"><span>원생 1인당 월 구독·소모품</span><b id="k_per">–</b><small>목표 원생 기준</small></div>
+      <div class="kpi"><span>개원까지</span><b id="k_days">–</b><small id="k_next"></small></div>
+    </div>
+    <p class="tip"><span class="src s-src">출처</span> 온라인 판매가를 확인한 단가 · <span class="src s-as">가정</span> 견적 전 임시 단가 · <span class="src s-q">견적</span> 업체 견적이 필요한 항목. 모든 단가는 직접 고칠 수 있습니다. 공급처에서 수수료를 받는 품목은 의뢰인에게 미리 알립니다.</p>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-t="items" aria-selected="true">비품·기기</button>
+    <button role="tab" data-t="subs" aria-selected="false">교재·구독</button>
+    <button role="tab" data-t="hq" aria-selected="false">본사 미팅·교육</button>
+    <button role="tab" data-t="time" aria-selected="false">일정표</button>
+    <button role="tab" data-t="close" aria-selected="false">폐업 시 역방향</button>
+  </nav>
+
+  <section class="tab sheet" id="t_items">
+    <div class="tblwrap"><table class="list"><thead><tr><th>쓸지</th><th>품목</th><th>선정 기준</th><th class="num">수량</th><th class="num">단가 (원)</th><th>구분</th><th class="num">금액</th></tr></thead><tbody id="itemRows"></tbody></table></div>
+  </section>
+  <section class="tab sheet" id="t_subs" hidden>
+    <p class="small muted">교재비를 교습비에 넣을지 따로 받을지 먼저 정합니다. 교습비에 넣으면 교육청 신고 교습비 안에서 감당해야 하고, 따로 받으면 학부모에게 교재비 명세를 안내합니다.</p>
+    <div class="tblwrap"><table class="list"><thead><tr><th>쓸지</th><th>교재·서비스</th><th>과금 방식</th><th class="num">단가 (원/월)</th><th class="num">대상 인원</th><th class="num">월 금액</th></tr></thead><tbody id="subRows"></tbody></table></div>
+    <div class="row"><button class="btn" id="addSub">항목 추가</button></div>
+  </section>
+  <section class="tab sheet" id="t_hq" hidden>
+    <div id="hqBox"></div>
+  </section>
+  <section class="tab sheet" id="t_time" hidden>
+    <p class="small muted">개원 예정일에서 거꾸로 계산한 일정입니다. 교육청 등록과 소방 완비는 지역마다 걸리는 시간이 달라 여유를 두었습니다.</p>
+    <ol class="time" id="timeList"></ol>
+  </section>
+  <section class="tab sheet" id="t_close" hidden>
+    <p class="small muted">학원을 정리할 때는 개원 준비를 거꾸로 밟습니다. 해지 위약금과 개인정보 서류 처리가 가장 자주 놓치는 부분입니다.</p>
+    <ul class="qs" id="closeList"></ul>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const won=n=>Math.round(n||0).toLocaleString('ko-KR');
+const man=n=>n>=10000?(Math.round(n/1000)/10).toLocaleString('ko-KR')+'만 원':won(n)+'원';
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const KEY='sagye_open_v1';
+function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast._);toast._=setTimeout(()=>t.hidden=true,2200)}
+
+/* 품목: [id, 분류, 품목, 선정기준, 수량식(S), 단가, 구분(once|month), 근거(src|as|q)] */
+const ITEMS=[
+ ['desk','강의실','학생 책상','높이 조절형이 초·중등 겸용에 유리. 모서리 라운드',S=>S.rooms*S.seats,90000,'once','as'],
+ ['chair','강의실','학생 의자','바퀴 없는 4발형이 소음·안전에 유리',S=>S.rooms*S.seats,45000,'once','as'],
+ ['tdesk','강의실','강사 책상·의자','강의실마다 1세트',S=>S.rooms,180000,'once','as'],
+ ['board','강의실','화이트보드','강의실 폭의 2/3 이상, 자석형',S=>S.rooms,150000,'once','as'],
+ ['tv','강의실','수업용 TV·모니터','55인치 이상, HDMI·무선 미러링 지원',S=>S.rooms,600000,'once','as'],
+ ['locker','강의실','교재장·사물함','좌석 10개당 1칸 묶음',S=>Math.ceil(S.rooms*S.seats/10),200000,'once','as'],
+ ['mono','기기','흑백 레이저 복합기 (렌탈)','학습지 대량 출력. 35~38ppm, 양면, 스캔. 기본 매수와 초과 단가를 꼭 비교',S=>1,12000,'month','src'],
+ ['color','기기','컬러 레이저 프린터 (렌탈)','안내문·상장·홍보물. 출력량이 적으면 구매형 잉크젯도 검토',S=>1,51300,'month','src'],
+ ['pc','기기','강사용 노트북·PC','강의실 수 + 상담실 1',S=>S.rooms+1,800000,'once','as'],
+ ['kiosk','기기','출결 태블릿·키오스크','등원 체크, 학부모 알림 연동',S=>1,400000,'once','as'],
+ ['wifi','기기','무선 공유기','태블릿 수업 시 동시 접속 30대 이상 지원',S=>1,150000,'once','as'],
+ ['cctv','기기','CCTV','출입구·복도 위주, 강의실 설치 시 고지',S=>2,0,'month','q'],
+ ['consult','상담·사무','상담 테이블·의자','4인용 1세트',S=>1,400000,'once','as'],
+ ['wait','상담·사무','대기 의자·소파','하원 대기 학부모용',S=>1,300000,'once','as'],
+ ['shred','상담·사무','문서 파쇄기','상담지·원생 서류 파기용. 개인정보 처리에 필수',S=>1,150000,'once','as'],
+ ['lockcab','상담·사무','잠금 문서함','원생 명부·계약서 보관',S=>1,200000,'once','as'],
+ ['jumbo','위생·소모품','점보롤 화장지 (16롤 박스)','2겹 150~300m. 화장실 칸당 월 1박스 기준',S=>Math.max(1,S.wc),30000,'month','src'],
+ ['towel','위생·소모품','핸드타올','화장실·교실 입구',S=>Math.max(1,S.wc),20000,'month','as'],
+ ['mat','위생·소모품','발매트','출입구 1 + 화장실 칸 수. 미끄럼 방지 고무 바닥, 3~6개월 교체',S=>1+S.wc,25000,'once','as'],
+ ['sani','위생·소모품','손소독제·물티슈','강의실마다 비치',S=>S.rooms,8000,'month','as'],
+ ['water','위생·소모품','정수기 (렌탈)','냉온수, 종이컵 디스펜서',S=>1,30000,'month','as'],
+ ['ext','안전','소화기','법정 수량은 소방서 확인. 강의실·복도 기준 임시 계산',S=>S.rooms+1,30000,'once','as'],
+ ['aid','안전','구급함','상비약은 보호자 동의 범위 안에서만 사용',S=>1,40000,'once','as'],
+ ['sign','외부','간판·출입문 시트','교육청 등록 명칭과 같게. 학교 하굣길에서 보이는지',S=>1,0,'once','q']
+];
+const SUBS0=[
+ {on:1,name:'영어 리딩 플랫폼 (기관 라이선스)',how:'1인 월',price:15000,who:'stu'},
+ {on:1,name:'단어 학습 앱',how:'1인 월',price:5000,who:'stu'},
+ {on:0,name:'수학 문제은행 구독',how:'기관 월',price:60000,who:'one'},
+ {on:1,name:'학생관리·출결·문자 시스템',how:'기관 월',price:50000,who:'one'},
+ {on:1,name:'주 교재 (권당, 학기 1권을 월로 나눔)',how:'1인 월',price:4000,who:'stu'}
+];
+const HQ=[
+ ['가맹·교재사 본사 미팅 전 질문',[
+  ['가맹금·교육비·보증금과 매월 로열티는 얼마이고, 무엇이 포함되는가','정보공개서와 대조'],
+  ['영업 지역 보호 범위는 어디까지인가 (같은 동·반경 몇 m)','계약서 문구로 받기'],
+  ['인테리어·간판·비품을 본사 지정 업체에서 사야 하는가','지정 시 견적을 따로 받아 비교'],
+  ['교재·플랫폼 의무 구매가 있는가, 원생 수와 연동되는가','월 고정비에 반영'],
+  ['정보공개서를 받은 날은 언제인가 (받은 날부터 14일이 지나야 가맹금 지급·계약 가능)','가맹사업법 제7조'],
+  ['개원 전후 본사 지원: 설명회, 홍보물, 레벨테스트 도구','무료와 유료 구분'],
+  ['중도 해지·양도 시 위약금과 승인 절차','나중의 양도 가치에 직결']]],
+ ['교육 일정 계획',[
+  ['원장 교육: 본사 운영 교육 또는 학원四季 운영 교육','개원 4~3주 전'],
+  ['강사 교육: 교재·플랫폼 사용, 레벨테스트, 상담 응대','개원 2주 전'],
+  ['학부모 상담 리허설: 자주 묻는 질문 20개 답변 맞추기','개원 1주 전'],
+  ['오픈 설명회 리허설: 순서, 자료, 등록 상담 동선','설명회 3일 전']]]
+];
+const TIME=[
+ [-60,'임대차 계약, 건축물 용도·소방 완비 가능 여부 확인','소장님'],
+ [-55,'인테리어 설계 확정 (강의실·상담실·동선, 원상복구 고려)','공동'],
+ [-50,'가맹 시 정보공개서 수령 (14일 숙려 시작)','원장'],
+ [-45,'인테리어 공사 시작, 간판 시안','공동'],
+ [-35,'교재·플랫폼 결정, 구독 계약','원장'],
+ [-30,'강사 채용 공고, 성범죄·아동학대 경력 조회 준비','원장'],
+ [-25,'소방 완비 증명, 교육청 학원 등록 신청','원장'],
+ [-21,'비품·기기 발주 (가구는 납기 2~3주)','원장'],
+ [-18,'사업자등록 (면세), 통장·카드 단말기','원장'],
+ [-14,'강사 교육, 레벨테스트 도구 준비','원장'],
+ [-14,'블로그·지역 카페·현수막 홍보 시작','원장'],
+ [-10,'비품 설치, 복합기·정수기 렌탈 설치','원장'],
+ [-7,'오픈 설명회, 레벨테스트 예약','원장'],
+ [-3,'교습비 게시, 시간표·반 편성 확정','원장'],
+ [0,'개원','공동']
+];
+const CLOSE=[
+ ['학부모 사전 고지와 잔여 교습비 반환 계산','학원법 반환 기준. 고지 시점부터 계산'],
+ ['렌탈 해지: 복합기·정수기·CCTV','약정 잔여 기간 위약금을 먼저 확인. 인수자 승계가 가능하면 승계'],
+ ['구독 해지: 학습 플랫폼·문자 시스템','결제일 직전에 해지. 학생 학습 기록은 학부모에게 내보내 줌'],
+ ['교재 재고 정리','반품 가능 기간 확인, 남은 교재는 인수자나 인근 학원에 이관'],
+ ['비품 처분','인수자에게 시설로 넘기면 시설권리금에 반영. 아니면 중고 매각'],
+ ['원생 명부·상담지·계약서 파기','파쇄기로 파기하고 파기 기록을 남김. 법정 보관 서류는 기간까지 보관'],
+ ['간판·출입문 시트 철거','원상복구 범위에 포함되는지 계약서 확인'],
+ ['교육청 폐원 신고, 세무서 폐업 신고','정리 순서는 서류 1 계약 이후 13장 일정에 맞춤']
+];
+const DEF={name:'○○영어교습소 (예시)',open:'',rooms:3,seats:8,wc:1,students:40,target:'초등',fr:'독립 학원',on:{},qty:{},price:{},subs:SUBS0};
+let S={};
+
+function base(){const d=new Date();d.setDate(d.getDate()+60);return d.toISOString().slice(0,10)}
+function load(){let s=null;try{s=JSON.parse(store.get(KEY)||'null')}catch(e){}S=Object.assign(JSON.parse(JSON.stringify(DEF)),s||{});if(!S.open)S.open=base();bindTop();render()}
+function save(){store.set(KEY,JSON.stringify(S))}
+function bindTop(){[['i_name','name'],['i_open','open'],['i_rooms','rooms'],['i_seats','seats'],['i_wc','wc'],['i_students','students'],['i_target','target'],['i_fr','fr']].forEach(([id,k])=>{const el=$(id);el.value=S[k];el.oninput=()=>{S[k]=el.type==='number'?(Number(el.value)||0):el.value;save();render()}})}
+
+/* 탭 */
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));document.querySelectorAll('section.tab').forEach(s=>s.hidden=s.id!=='t_'+b.dataset.t)});
+
+function itemQty(it){const v=S.qty[it[0]];return v!=null&&v!==''?Number(v):it[4](S)}
+function itemPrice(it){const v=S.price[it[0]];return v!=null&&v!==''?Number(v):it[5]}
+function itemOn(it){return S.on[it[0]]!==0}
+function render(){
+ // 비품
+ let cat='',html='';let once=0,month=0;
+ ITEMS.forEach(it=>{
+  if(it[1]!==cat){cat=it[1];html+=`<tr class="cat"><td colspan="7">${cat}</td></tr>`}
+  const on=itemOn(it),q=itemQty(it),p=itemPrice(it),amt=q*p;
+  if(on){if(it[6]==='once')once+=amt;else month+=amt}
+  html+=`<tr class="${on?'':'off'}"><td><input type="checkbox" data-on="${it[0]}" ${on?'checked':''} aria-label="${esc(it[2])} 사용"></td><td>${esc(it[2])}</td><td class="tip">${esc(it[3])}</td><td class="num"><input type="number" min="0" data-q="${it[0]}" value="${q}" aria-label="${esc(it[2])} 수량"></td><td class="num"><input type="number" min="0" step="1000" data-p="${it[0]}" value="${p}" aria-label="${esc(it[2])} 단가"></td><td><span class="src ${it[7]==='src'?'s-src':it[7]==='as'?'s-as':'s-q'}">${it[7]==='src'?'출처':it[7]==='as'?'가정':'견적'}</span> <span class="tip">${it[6]==='once'?'일시':'월'}</span></td><td class="num">${amt?won(amt):'–'}</td></tr>`});
+ $('itemRows').innerHTML=html;
+ $('itemRows').querySelectorAll('[data-on]').forEach(c=>c.onchange=()=>{S.on[c.dataset.on]=c.checked?1:0;save();render()});
+ $('itemRows').querySelectorAll('[data-q]').forEach(c=>c.onchange=()=>{S.qty[c.dataset.q]=c.value;save();render()});
+ $('itemRows').querySelectorAll('[data-p]').forEach(c=>c.onchange=()=>{S.price[c.dataset.p]=c.value;save();render()});
+ // 구독
+ let subM=0;
+ $('subRows').innerHTML=S.subs.map((r,i)=>{const n=r.who==='stu'?S.students:1;const a=(r.on?1:0)*r.price*n;subM+=a;
+  return `<tr class="${r.on?'':'off'}"><td><input type="checkbox" data-si="${i}" ${r.on?'checked':''} aria-label="사용"></td><td><input type="text" data-sn="${i}" value="${esc(r.name)}" aria-label="이름"></td><td><select data-sw="${i}" aria-label="과금 방식"><option value="stu" ${r.who==='stu'?'selected':''}>1인 월</option><option value="one" ${r.who==='one'?'selected':''}>기관 월</option></select></td><td class="num"><input type="number" min="0" step="1000" data-sp="${i}" value="${r.price}" aria-label="단가"></td><td class="num">${n}</td><td class="num">${a?won(a):'–'}</td></tr>`}).join('')+`<tr><td colspan="5"><b>합계</b> <span class="src s-as">가정</span> <span class="tip">단가는 업체 견적으로 바꿉니다</span></td><td class="num"><b>${won(subM)}</b></td></tr>`;
+ $('subRows').querySelectorAll('[data-si]').forEach(c=>c.onchange=()=>{S.subs[c.dataset.si].on=c.checked?1:0;save();render()});
+ $('subRows').querySelectorAll('[data-sn]').forEach(c=>c.onchange=()=>{S.subs[c.dataset.sn].name=c.value;save()});
+ $('subRows').querySelectorAll('[data-sw]').forEach(c=>c.onchange=()=>{S.subs[c.dataset.sw].who=c.value;save();render()});
+ $('subRows').querySelectorAll('[data-sp]').forEach(c=>c.onchange=()=>{S.subs[c.dataset.sp].price=Number(c.value)||0;save();render()});
+ month+=subM;
+ // 요약
+ $('k_once').textContent=man(once);$('k_month').textContent=man(month);
+ const consumables=ITEMS.filter(it=>it[1]==='위생·소모품'&&it[6]==='month'&&itemOn(it)).reduce((s,it)=>s+itemQty(it)*itemPrice(it),0);
+ $('k_per').textContent=S.students?won((subM+consumables)/S.students)+'원':'–';
+ const od=new Date(S.open+'T00:00:00'),today=new Date();today.setHours(0,0,0,0);const days=Math.round((od-today)/86400000);
+ $('k_days').textContent=isNaN(days)?'–':(days>=0?days+'일':'지남');
+ // 일정
+ const fmt=d=>`${d.getMonth()+1}월 ${d.getDate()}일`;let next='';
+ $('timeList').innerHTML=TIME.map(([o,t,w])=>{const d=new Date(od);d.setDate(d.getDate()+o);if(!next&&d>=today)next=fmt(d)+' · '+t;
+  return `<li><b class="d">${isNaN(d)?'':fmt(d)}</b><span class="dd">${o===0?'D-day':'D'+o}</span><span>${esc(t)}<span class="who ${w==='소장님'?'s-as':w==='공동'?'s-q':'s-src'} src">${w}</span></span></li>`}).join('');
+ $('k_next').textContent=next?'다음: '+next:'';
+ if(S.fr!=='프랜차이즈 가맹')$('timeList').querySelectorAll('li')[2].style.opacity=.45;
+ // 본사
+ $('hqBox').innerHTML=(S.fr==='프랜차이즈 가맹'?'':'<p class="note">독립 학원으로 설정되어 있습니다. 첫 묶음은 교재사·플랫폼 업체 미팅에도 그대로 쓸 수 있습니다.</p>')+HQ.map(([h,qs])=>`<h3>${h}</h3><ul class="qs">${qs.map(([q,w])=>`<li><span class="box"></span><span>${esc(q)}<span class="w">${esc(w)}</span></span></li>`).join('')}</ul>`).join('');
+ $('closeList').innerHTML=CLOSE.map(([q,w])=>`<li><span class="box"></span><span>${esc(q)}<span class="w">${esc(w)}</span></span></li>`).join('');
+ render.once=once;render.month=month;
+}
+$('addSub').onclick=()=>{S.subs.push({on:1,name:'새 항목',how:'1인 월',price:0,who:'stu'});save();render()};
+$('resetBtn').onclick=()=>{S=JSON.parse(JSON.stringify(DEF));S.open=base();save();bindTop();render();toast('예시 값으로 되돌렸습니다')};
+$('copyBtn').onclick=()=>{const lines=[`[학원四季 개원 준비] ${S.name} · 개원 ${S.open}`,`초기 일시 비용 ${man(render.once)} · 월 고정 비용 ${man(render.month)}`,'',...ITEMS.filter(itemOn).map(it=>`- ${it[2]} ${itemQty(it)}개 × ${won(itemPrice(it))}원 (${it[6]==='once'?'일시':'월'})`),'',...S.subs.filter(r=>r.on).map(r=>`- ${r.name} ${won(r.price)}원/${r.who==='stu'?'1인':'기관'} 월`),'','※ 단가 중 "가정"은 견적 전 임시 값'];const t=lines.join('\n');try{navigator.clipboard.writeText(t).then(()=>toast('목록을 복사했습니다'),()=>toast('복사하지 못했습니다'))}catch(e){toast('복사하지 못했습니다')}};
+let framed=true;try{framed=window.self!==window.top}catch(e){}
+if(!framed){$('printBtn').hidden=false;$('printBtn').onclick=()=>window.print()}
+load();
+const CF={app:'open',label:'개원 플래너',get:()=>S,set:p=>{S=Object.assign(JSON.parse(JSON.stringify(DEF)),p);if(!S.open)S.open=base();bindTop();render();save()},
+ caseInfo:()=>({name:S.name}),
+ prefill:f=>{if(f.case.name)S.name=f.case.name;bindTop();render();save()},
+ toast,newIds:['resetBtn']};
+/* 의뢰 파일: 앱 사이에서 한 의뢰의 값을 한 덩어리로 주고받는다. 앱별 어댑터 CF가 먼저 정의되어 있어야 한다. */
+(function(A){
+ const FK='sagye_casefile_v1';
+ const st={get(){try{return JSON.parse(localStorage.getItem(FK)||'null')}catch(e){return null}},set(v){try{localStorage.setItem(FK,JSON.stringify(v))}catch(e){}}};
+ let file=st.get();
+ const el=id=>document.getElementById(id);
+ function show(){el('cfName').textContent=file&&file.case&&file.case.name?file.case.name:'열린 의뢰 없음';el('cfDate').textContent=file&&file.saved?`마지막 복사 ${file.saved}`:''}
+ function pack(){
+  const info=A.caseInfo()||{};
+  file=file||{v:1,case:{}};file.v=1;file.case=file.case||{};
+  Object.entries(info).forEach(([k,v])=>{if(v&&!file.case[k])file.case[k]=v});
+  file[A.app]=JSON.parse(JSON.stringify(A.get()));
+  if(A.handoff){const h=A.handoff();if(h)file.handoff=h}
+  file.saved=new Date().toLocaleDateString('sv');st.set(file);show();
+  return '[학원四季 의뢰 파일 v1]\n'+JSON.stringify(file)+'\n[끝]';
+ }
+ function fromDiag(t){const h=t.match(/\[학원 경영 진단 결과지\]\s*(.+?)\s·\s(\d{4}-\d{2}-\d{2})/);if(!h)return null;const c=(t.match(/의뢰자:\s*([^\n]*)/)||[])[1]||'';const [nm,,ar]=c.split('/').map(x=>(x||'').trim());return {v:1,case:{name:`${ar||''} ${h[1]}`.trim(),client:nm||'',kind:h[1],diagDate:h[2]},diag:t.trim()}}
+ function unpack(t){const d=fromDiag(t);if(d)return d;const i=t.indexOf('{'),j=t.lastIndexOf('}');if(i<0||j<i)throw new Error('형식');const o=JSON.parse(t.slice(i,j+1));if(o.v!==1||!o.case)throw new Error('형식');return o}
+ function open(o){
+  file=o;st.set(file);
+  if(o[A.app]){A.set(o[A.app]);A.toast(`'${o.case.name||'의뢰'}'의 ${A.label} 값을 불러왔습니다`)}
+  else{A.prefill(o);A.toast(`'${o.case.name||'의뢰'}'를 열었습니다. 다른 화면의 값으로 채울 수 있는 칸을 채웠습니다`)}
+  show();el('cfPanel').hidden=true;el('cfOpenBtn').setAttribute('aria-expanded','false');el('cfText').value='';
+ }
+ el('cfCopy').onclick=()=>{const t=pack();const out=el('cfOut');
+  const fail=()=>{out.hidden=false;out.value=t;out.focus();out.select();A.toast('자동 복사가 막혀 있어 글을 선택해 두었습니다. 직접 복사해 주세요')};
+  try{navigator.clipboard.writeText(t).then(()=>{out.hidden=true;A.toast('의뢰 파일을 복사했습니다. 메모장 등에 붙여 넣어 보관하세요')},fail)}catch(e){fail()}};
+ el('cfOpenBtn').onclick=()=>{const p=el('cfPanel');p.hidden=!p.hidden;el('cfOpenBtn').setAttribute('aria-expanded',String(!p.hidden));if(!p.hidden)el('cfText').focus()};
+ el('cfLoad').onclick=()=>{try{open(unpack(el('cfText').value))}catch(e){A.toast('의뢰 파일 형식이 아닙니다. [학원四季 의뢰 파일 v1]로 시작하는 글 전체를 붙여 넣어 주세요')}};
+ el('cfFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{open(unpack(String(r.result)))}catch(err){A.toast('파일 내용이 의뢰 파일 형식이 아닙니다')}};r.readAsText(f);e.target.value=''};
+ (A.newIds||[]).forEach(id=>{const b=el(id);if(b)b.addEventListener('click',()=>{file=null;st.set(null);show()})});
+ show();
+})(CF);
+
+})();
+</script>
