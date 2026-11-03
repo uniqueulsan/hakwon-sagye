@@ -10,4 +10,6 @@
 - 잠금: `functions/_middleware.js` — 쿠키 `sg_auth`(30일). `/__logout` 으로 나가기.
 - 비밀번호: GitHub Secrets `SAGYE_SITE_PASSWORD` (대화창에 붙여넣지 않음). 없으면 503 '준비 중'.
 - 공개 경로: GitHub Variables `SAGYE_PUBLIC_PATHS` (예: `/,/diagnosis/`) — 출시 때 웹헤더·진단만 공개.
-- 원본: `src/` (*.src.html · shared/ · build.py). 화면 고칠 때 src 고치고 → build → dist 갱신 → push.
+- 원본: `src/` (*.src.html · academy-diagnosis.html · shared/ · build.py). 화면 고칠 때 src 고치고 → build → dist 갱신 → push.
+- 진단 '문항 보기'(응답 없이 설문 내용 확인): `/diagnosis/#q-start`(창업·인수) · `#q-close`(운영·양도) · `#q-spring` `#q-summer` `#q-autumn` `#q-winter`
+- 진단 페이지 갱신: `src/academy-diagnosis.html` 첫 줄(`<title>`)을 뺀 나머지를 `dist/diagnosis/index.html` 의 `<body>` 안에 넣음 (머리말은 기존 dist 그대로).

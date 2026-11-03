@@ -34,6 +34,16 @@ p{margin:0}
 .small{font-size:.85rem}
 header.top{display:flex;flex-direction:column;gap:6px}
 .org{font-size:.85rem;color:var(--muted)}
+.qv-head h2{margin:0 0 4px}.qv-pick{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.qv-pick a{padding:6px 12px;border:1.5px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem;background:var(--sheet)}
+.qv-pick a[aria-current="page"]{border-color:var(--accent);background:var(--accent);color:#fff}
+.qv-print{font:inherit;padding:6px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink);cursor:pointer}
+.qv-sec{margin-top:18px}.qv-sec h3{font-size:1rem;margin:0 0 6px;padding-bottom:4px;border-bottom:2px solid var(--line)}
+.qv-q{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0;break-inside:avoid}
+.qv-q .qn{font-weight:700}.qv-q .ax{font-size:.78rem;color:var(--muted);margin-left:6px}
+.qv-q ul{margin:6px 0 0;padding-left:18px}.qv-q li{font-size:.92rem}.qv-q .pt{color:var(--muted);font-size:.82rem;margin-left:6px}
+.qv-q .fl{color:var(--warn);font-size:.82rem;margin-left:6px;font-weight:600}.qv-q .hn{font-size:.85rem;color:var(--muted);margin:6px 0 0}
+.qv-axes{font-size:.88rem;color:var(--muted)}
 nav.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
 nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:8px 12px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
 nav.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
@@ -229,6 +239,7 @@ ul.plain{font-size:.96rem;gap:6px}
   <nav class="tabs no-print" role="tablist">
     <button role="tab" id="tabDiag" aria-selected="true">진단하기</button>
     <button role="tab" id="tabLaw" aria-selected="false">관련 법규</button>
+    <button role="tab" id="tabQ" aria-selected="false">문항 보기</button>
   </nav>
 
   <!-- 진단 -->
@@ -274,6 +285,15 @@ ul.plain{font-size:.96rem;gap:6px}
   </section>
 
   <!-- 법규 -->
+  <section id="viewQ" class="wrap" hidden>
+    <div class="qv-head">
+      <h2>설문 문항 보기</h2>
+      <p class="small">응답하지 않고 문항·선택지·점수만 봅니다. 네 계절은 설문 두 가지를 나눠 씁니다 — 봄·가을은 <b>창업·인수 설문</b>, 여름·겨울은 <b>운영·양도 설문</b>.</p>
+      <div class="qv-pick no-print" id="qvPick"></div>
+      <button class="qv-print no-print" type="button" onclick="window.print()">인쇄</button>
+    </div>
+    <div id="qvBody"></div>
+  </section>
   <section id="viewLaw" class="wrap" hidden>
     <div class="sheet">
       <h2>학원 창업·운영·양도·폐업 관련 법규</h2>
@@ -410,8 +430,22 @@ function paintOrg(){const p=[cfg('setOrg'),cfg('setName'),cfg('setTel')].filter(
 paintOrg();
 
 /* ---------- 탭 ---------- */
-function showTab(t){$('tabDiag').setAttribute('aria-selected',t==='diag');$('tabLaw').setAttribute('aria-selected',t==='law');$('viewDiag').hidden=t!=='diag';$('viewLaw').hidden=t!=='law'}
-$('tabDiag').onclick=()=>showTab('diag');$('tabLaw').onclick=()=>showTab('law');
+function showTab(t){['Diag','Law','Q'].forEach(k=>{$('tab'+k).setAttribute('aria-selected',t===k.toLowerCase());$('view'+k).hidden=t!==k.toLowerCase()})}
+$('tabDiag').onclick=()=>showTab('diag');$('tabLaw').onclick=()=>showTab('law');$('tabQ').onclick=()=>{if(!/^#q-/.test(location.hash))location.hash='q-start';else showTab('q')};
+const QV={start:{t:'창업·인수 설문 (봄·가을)',q:()=>Q_START,ax:AX_START,info:[]},close:{t:'운영·양도 설문 (여름·겨울)',q:()=>Q_CLOSE,ax:AX_CLOSE,info:()=>INFO_CLOSE},
+ spring:{alias:'start',note:'봄·창업 진단'},autumn:{alias:'start',note:'가을·인수 진단 — 창업·인수 설문을 같이 씁니다'},summer:{alias:'close',note:'여름·운영 진단'},winter:{alias:'close',note:'겨울·양도·정리 진단 — 운영·양도 설문을 같이 씁니다'}};
+function renderQV(key){const e=QV[key]||QV.start,base=QV[e.alias||key]||QV.start,ex=v=>String(v==null?'':v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ $('qvPick').innerHTML=[['start','창업·인수'],['close','운영·양도'],['spring','봄'],['summer','여름'],['autumn','가을'],['winter','겨울']].map(([k,l])=>`<a href="#q-${k}"${k===key?' aria-current="page"':''}>${l}</a>`).join('');
+ const qs=base.q(),info=INFO_COMMON.concat(typeof base.info==='function'?base.info():[]);let h=`<h3 style="margin-top:10px">${ex(base.t)}${e.note?` · ${ex(e.note)}`:''}</h3><p class="qv-axes">진단 축: ${Object.values(base.ax).map(ex).join(' · ')} (각 0~100 환산) · ⚠ = 위험 신호 · 점수 없는 문항은 결과 비교용</p>`;
+ h+=`<div class="qv-sec"><h3>의뢰자 정보</h3><div class="qv-q"><ul>${info.map(f=>`<li>${ex(f[1])}${f[2]?' <span class="pt">(필수)</span>':''}${f[4]?` <span class="pt">— ${f[4].filter(Boolean).map(ex).join(' / ')}</span>`:''}</li>`).join('')}</ul></div></div>`;
+ let sec='',n=0;qs.forEach(q=>{if(q.sec!==sec){if(sec)h+='</div>';sec=q.sec;h+=`<div class="qv-sec"><h3>${ex(sec)}</h3>`}n++;
+  const ty={one:'하나 고르기',multi:'여러 개 고르기',scale:'1~5점',text:'자유 기술'}[q.type]||'';
+  h+=`<div class="qv-q"><div><span class="qn">${n}. ${ex(q.q)}</span><span class="ax">${ty}${q.ax?' · '+ex(base.ax[q.ax]):''}${q.mult?' · 점수×'+q.mult:''}</span></div>`;
+  if(q.o)h+=`<ul>${q.o.map(o=>`<li>${ex(o[0])}${typeof o[1]==='number'?`<span class="pt">${o[1]}점</span>`:''}${o[2]?`<span class="fl">⚠ ${ex(o[2])}</span>`:''}</li>`).join('')}</ul>`;
+  if(q.hint)h+=`<p class="hn">${ex(q.hint)}</p>`;h+='</div>'});
+ h+='</div>';$('qvBody').innerHTML=h;showTab('q')}
+function qvRoute(){const m=(location.hash||'').match(/^#q-(\w+)/);if(m){renderQV(m[1]);return true}return false}
+window.addEventListener('hashchange',qvRoute);
 
 /* ---------- 단계 ---------- */
 function go(n){step=n;[1,2,3,4].forEach(i=>$('step'+i).hidden=i!==n);
@@ -425,8 +459,8 @@ let season='';
 function openSeason(k){const s=SEASONS[k];if(!s)return;season=k;mode=s.mode;sample=false;ans={};buildInfo();go(2)}
 document.querySelectorAll('.door.s4').forEach(b=>b.onclick=()=>openSeason(b.dataset.season));
 function seasonLabel(){return season?SEASONS[season].label:(mode==='start'?'창업·인수 진단':'운영·양도·폐업 진단')}
-(function(){const k=(location.hash||'').slice(1);if(SEASONS[k]){showTab('diag');openSeason(k)}})();
-window.addEventListener('hashchange',()=>{const k=location.hash.slice(1);if(SEASONS[k])openSeason(k)});
+(function(){if(qvRoute())return;const k=(location.hash||'').slice(1);if(SEASONS[k]){showTab('diag');openSeason(k)}})();
+window.addEventListener('hashchange',()=>{const k=location.hash.slice(1);if(SEASONS[k]){showTab('diag');openSeason(k)}});
 $('back2').onclick=()=>go(1);
 $('back3').onclick=()=>go(2);
 
